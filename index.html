@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My App</title>
+</head>
+<body>
+
+<h1>🔥 My Website</h1>
+<button onclick="getData()">Get Data</button>
+<p id="output"></p>
+
+<script>
+async function getData() {
+    let res = await fetch("http://localhost:3000/data");
+    let data = await res.json();
+    document.getElementById("output").innerText = data.message;
+}
+</script>
+<h2>Register</h2>
+<input id="ruser" placeholder="username">
+<input id="rpass" placeholder="password">
+<button onclick="register()">Register</button>
+
+<h2>Login</h2>
+<input id="luser" placeholder="username">
+<input id="lpass" placeholder="password">
+<button onclick="login()">Login</button>
+
+<script>
+async function register(){
+    await fetch("http://localhost:3000/register", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            username:ruser.value,
+            password:rpass.value
+        })
+    });
+    alert("Registered");
+}
+
+async function login(){
+    let res = await fetch("http://localhost:3000/login", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            username:luser.value,
+            password:lpass.value
+        })
+    });
+    let text = await res.text();
+    alert(text);
+}
+</script>
+
+</body>
+</html>
