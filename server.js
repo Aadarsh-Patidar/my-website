@@ -1,30 +1,25 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MongoDB connect
-mongoose.connect("mongodb://127.0.0.1:27017/mydb");
-
-// Schema
-const User = mongoose.model("User", {
-    username: String,
-    password: String
-});
+// Dummy data (temporary)
+let users = [];
 
 // Register
-app.post("/register", async (req, res) => {
-    const user = new User(req.body);
-    await user.save();
+app.post("/register", (req, res) => {
+    users.push(req.body);
     res.send("User registered");
 });
 
 // Login
-app.post("/login", async (req, res) => {
-    const user = await User.findOne(req.body);
+app.post("/login", (req, res) => {
+    const user = users.find(
+        u => u.username === req.body.username && u.password === req.body.password
+    );
+
     if (user) {
         res.send("Login success ✅");
     } else {
@@ -32,4 +27,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.listen(3000, () => console.log("Server running"));
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => console.log("Server running"));
